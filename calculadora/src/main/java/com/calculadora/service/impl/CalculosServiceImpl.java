@@ -1,5 +1,6 @@
 package com.calculadora.service.impl;
 
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,13 @@ public class CalculosServiceImpl implements CalculosService {
 	@Autowired
 	private TracerImpl tracer;
 	
+	public void setTracer(TracerImpl tracer) {
+	    this.tracer = tracer;
+	}
+
+	
 	@Override
-	public RespuestaMensajeDTO suma(String a, String b) {
+	public RespuestaMensajeDTO suma(String a, String b) throws ServiceException{
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO();
 		try {
 			int intA = Integer.parseInt(a);
@@ -26,18 +32,16 @@ public class CalculosServiceImpl implements CalculosService {
 			respuestaMensajeDTO.setCodigoStatus(HttpStatus.OK.value());
 		} catch (NumberFormatException e) {
 			tracer.trace(e.getMessage());
-			respuestaMensajeDTO.setMensaje("Ocurrió un error al realizar la suma.");
-			respuestaMensajeDTO.setCodigoStatus(HttpStatus.BAD_REQUEST.value());
+			throw new ServiceException("Los parametros no son números enteros válidos.");
 		} catch (Exception e) {
 			tracer.trace(e.getMessage());
-			respuestaMensajeDTO.setMensaje("Ocurrió un error al realizar la suma");
-			respuestaMensajeDTO.setCodigoStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			throw new ServiceException("Se produjo un error al realizar la suma.");
 		}
 		return respuestaMensajeDTO;
 	}
 
 	@Override
-	public RespuestaMensajeDTO resta(String a, String b) {
+	public RespuestaMensajeDTO resta(String a, String b) throws ServiceException{
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO();
 		try {
 			int intA = Integer.parseInt(a);
@@ -48,12 +52,10 @@ public class CalculosServiceImpl implements CalculosService {
 			respuestaMensajeDTO.setCodigoStatus(HttpStatus.OK.value());
 		} catch (NumberFormatException e) {
 			tracer.trace(e.getMessage());
-			respuestaMensajeDTO.setMensaje("Ocurrió un error al realizar la resta.");
-			respuestaMensajeDTO.setCodigoStatus(HttpStatus.BAD_REQUEST.value());
+			throw new ServiceException("Los parametros no son números enteros válidos.");
 		} catch (Exception e) {
 			tracer.trace(e.getMessage());
-			respuestaMensajeDTO.setMensaje("Ocurrió un error al realizar la resta.");
-			respuestaMensajeDTO.setCodigoStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			throw new ServiceException("Se produjo un error al realizar la resta.");
 		}
 		return respuestaMensajeDTO;
 	}
