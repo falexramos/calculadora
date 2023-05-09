@@ -84,12 +84,44 @@ public class CalculadoraControllerTest {
 	
 	@Test
 	public void sumaError500Test() throws Exception {
-	    // Arrange
+
 	    TracerImpl tracer = mock(TracerImpl.class);
 	    CalculosServiceImpl calculosService = new CalculosServiceImpl();
 	    calculosService.setTracer(tracer);
 	    String a = "2";
-	    String b = "abc";
+	    String b = "p";
+	    ServiceException exception = new ServiceException("Se produjo un error al realizar la suma.");
+	    doThrow(exception).when(tracer).trace(anyString());
+
+	    ServiceException result = assertThrows(ServiceException.class, () -> calculosService.suma(a,b));
+
+	    assertEquals(exception.getMessage(), result.getMessage());
+	}
+	
+	@Test
+	public void restaError400Test() throws Exception {
+	    
+	    TracerImpl tracer = mock(TracerImpl.class);
+	    CalculosServiceImpl calculosService = new CalculosServiceImpl();
+	    calculosService.setTracer(tracer);
+	    String a = "2";
+	    String b = "";
+	    ServiceException exception = new ServiceException("Se produjo un error al realizar la resta.");
+	    doThrow(exception).when(tracer).trace(anyString());
+
+	    ServiceException result = assertThrows(ServiceException.class, () -> calculosService.resta(a, b));
+
+	    assertEquals(exception.getMessage(), result.getMessage());
+	}
+	
+	@Test
+	public void sumaError400Test() throws Exception {
+
+	    TracerImpl tracer = mock(TracerImpl.class);
+	    CalculosServiceImpl calculosService = new CalculosServiceImpl();
+	    calculosService.setTracer(tracer);
+	    String a = "2";
+	    String b = "";
 	    ServiceException exception = new ServiceException("Se produjo un error al realizar la suma.");
 	    doThrow(exception).when(tracer).trace(anyString());
 
@@ -97,7 +129,6 @@ public class CalculadoraControllerTest {
 
 	    assertEquals(exception.getMessage(), result.getMessage());
 	}
-	
 	
 	
 }

@@ -1,6 +1,5 @@
 package com.calculadora.handler;
 
-
 import java.text.MessageFormat;
 
 import org.hibernate.service.spi.ServiceException;
@@ -8,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -46,4 +46,5 @@ public class ExceptionControllerHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, errorMessageDTO, headers, status, request);
 	}
+
 }
